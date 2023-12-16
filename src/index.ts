@@ -4,12 +4,15 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import path from 'path'
 import morgan from 'morgan'
+import { ApolloServer } from 'apollo-server-express'
+import { buildSchema } from 'type-graphql'
 
 // to fix __dirname undefined after compiling
 import * as url from 'url'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 import { connectToDb } from './services/database.js'
+import { resolvers } from './resolvers.js'
 
 
 // create app
@@ -46,6 +49,34 @@ app.get("/", async(req, res)=> {
         api: "Auto",
     })
 })
+
+
+
+// create schema
+const schema = await buildSchema({
+    resolvers,
+})
+
+// create graphql server
+const graphServer = new ApolloServer({
+    schema,
+    plugins: [],
+    context: ({ req, res })=> {
+
+        return {
+            req,
+            res,
+            user: req['user'],
+            requestCountryCode: req['requestCountryCode']
+        }
+    },
+})
+
+// start graphql server
+await graphServer.start()
+graphServer.applyMiddleware({ app, path: '/api' })
+
+
 
 
 export const server = app
