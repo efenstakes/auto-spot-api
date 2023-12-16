@@ -6,6 +6,7 @@ import path from 'path'
 import morgan from 'morgan'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
+import serverless from 'serverless-http'
 
 // to fix __dirname undefined after compiling
 import * as url from 'url'
@@ -38,6 +39,10 @@ app.use(morgan('dev'))
 // start database
 connectToDb()
 
+
+// get auth user
+app.use(AuthenticationService.authenticateAuthorizationHeaders)
+app.use(AuthenticationService.authenticateCookies)
 
 console.log("env", process.env.DB_URL)
 
@@ -79,6 +84,10 @@ await graphServer.start()
 graphServer.applyMiddleware({ app, path: '/api' })
 
 
+// export aws lambda handler
+export const handler = serverless(app)
 
 
 export const server = app
+
+
