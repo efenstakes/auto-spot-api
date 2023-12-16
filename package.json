@@ -5,6 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "cp ./src/.env ./build/.env & tsc --watch & nodemon ./build/dev.js",
+    "start": "node ./build/dev.js",
+    "build": "tsc -p .",
+    "deploy": "yarn build && serverless deploy"
   },
   "keywords": [],
   "author": "",
