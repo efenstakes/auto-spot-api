@@ -1,7 +1,8 @@
 import { AuthChecker } from "type-graphql"
 import { IContext } from "../sub_types/context.js"
 
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
+import * as jwt from 'jsonwebtoken'
 
 
 export class AuthenticationService {
@@ -64,6 +65,7 @@ export class AuthenticationService {
             
             if( payload ) {
                 console.log("} else if( payload ) {")
+                // @ts-ignore
                 const { password, ...user } = payload
                 req.user = user
             }
