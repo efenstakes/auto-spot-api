@@ -9,27 +9,27 @@ export class OrderPayment {
 
     @Field(()=> String, { nullable: false })
     @prop({ required: true, })
-    id: String
+    id: string
 
     @Field(()=> String, { nullable: false })
     @prop({ required: true, })
-    phone: String
+    phone: string
 
     @Field(()=> String, { nullable: false })
     @prop({ enum: [ 'MPESA', 'BANK', ] })
-    type: String
+    type: string
 
     @Field(()=> Number, { nullable: false })
     @prop({ required: false, })
-    amount: Number
+    amount: number
 
     @Field(()=> String, { nullable: false })
     @prop({ enum: [ 'MPESA', 'BANK', ] })
-    code: String
+    code: string
 
     @Field(()=> Number, { nullable: true })
     @prop({ default: Date.now() })
-    madeOn?: Number
+    madeOn?: number
 
 }
 
@@ -43,27 +43,31 @@ export class OrderProducts {
 
     @Field(()=> String, { nullable: false })
     @prop({ required: true, })
-    name: String
+    name: string
 
     @Field(()=> String, { nullable: false })
     @prop({ required: true, })
-    variantName: String
+    variantName: string
 
     @Field(()=> Number, { nullable: false })
     @prop({ required: false, })
-    price: Number
+    price: number
+
+    @Field(()=> Number, { nullable: false })
+    @prop({ required: false, })
+    quantity: number
 
     @Field(()=> Number, { nullable: true })
     @prop({ required: false, })
-    discount?: Number
+    discount?: number
 
     @Field(()=> Number, { nullable: true })
     @prop({ required: false, })
-    discountStartDate?: Number
+    discountStartDate?: number
 
     @Field(()=> Number, { nullable: true })
     @prop({ required: false, })
-    discountLastDate?: Number
+    discountLastDate?: number
 }
 
 @ObjectType("Order")
