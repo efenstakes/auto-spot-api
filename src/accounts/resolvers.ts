@@ -6,7 +6,7 @@ import { AuthenticationService } from "../services/authentication.js";
 
 
 @Resolver()
-export class ProductsResolvers {
+export class AccountsResolvers {
 
 
     @Authorized()
