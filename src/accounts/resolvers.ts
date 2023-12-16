@@ -63,5 +63,41 @@ export class AccountsResolvers {
         }
     }
 
+  
+    @Authorized()
+    @Query(()=> Boolean, { nullable: false, })
+    async updateAccountPhoneNumber( @Arg("phone") phone: string,  @Ctx() context: IContext, ) {
+
+        const user = context.user
+        try {
+
+            const result = await AccountsModel.findByIdAndUpdate(user?._id, { phone, })
+            console.log("result ", result);
+            
+            return true
+        } catch (error) {
+            
+            console.log("Error in updateAccountPhoneNumber ", error)
+            return false
+        }
+    }
+
+    @Authorized()
+    @Query(()=> Boolean, { nullable: false, })
+    async deleteAccount( @Ctx() context: IContext, ) {
+
+        const user = context.user
+        try {
+
+            const result = await AccountsModel.findByIdAndDelete(user?._id)
+            console.log("result ", result);
+            
+            return true
+        } catch (error) {
+            
+            console.log("Error in deleteAccount ", error)
+            return false
+        }
+    }
 
 }
