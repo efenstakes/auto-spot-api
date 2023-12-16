@@ -80,4 +80,28 @@ export class ProductsResolvers {
     }
     
     
+    @Authorized()
+    @Query(()=> Boolean, { nullable: false, })
+    async deleteProduct( @Arg("id") id: string,  @Ctx() context: IContext, ) {
+
+        // ensure user is an admin
+        const user = context.user
+        if( user?.role != "ADMIN" ) {
+
+            return { error: "Not Authorized" }
+        }
+        
+        try {
+
+            const result = await ProductsModel.findByIdAndDelete(id)
+            console.log("result ", result);
+            
+            return true
+        } catch (error) {
+            
+            console.log("Error in deleteProduct ", error)
+            return false
+        }
+    }
+
 }
