@@ -13,6 +13,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 import { connectToDb } from './services/database.js'
 import { resolvers } from './resolvers.js'
+import { AuthenticationService } from './services/authentication.js'
 
 
 // create app
@@ -55,6 +56,7 @@ app.get("/", async(req, res)=> {
 // create schema
 const schema = await buildSchema({
     resolvers,
+    authChecker: AuthenticationService.authChecker,
 })
 
 // create graphql server
