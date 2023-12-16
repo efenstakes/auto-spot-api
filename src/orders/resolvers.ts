@@ -1,7 +1,7 @@
 import { Arg, Args, Authorized, Ctx, Query, Resolver } from "type-graphql";
 import { IContext } from "../sub_types/context.js";
 import { OrderProducts, OrdersModel, PlaceOrderResult } from "./types.js";
-import { PlaceOrderInput } from "./inputs.js";
+import { GetOrdersInput, PlaceOrderInput, UpdateOrderInput } from "./inputs.js";
 import { ProductsModel } from "../products/types.js";
 
 
@@ -70,6 +70,12 @@ export class ProductsResolvers {
                 totalPaid: 0,
                 totalPrice,
             }).save()
+
+
+            // initiate payment
+
+
+
             return order
         } catch (error) {
             
@@ -78,5 +84,108 @@ export class ProductsResolvers {
         }
     }
 
+
+    @Authorized()
+    @Query(()=> Boolean, { nullable: false, })
+    async updateOrder( @Arg("input") input: UpdateOrderInput,  @Ctx() context: IContext, ) {
+
+        // ensure user is an admin
+        const user = context.user
+        if( user?.role != "ADMIN" ) {
+
+            return { error: "Not Authorized" }
+        }
+        
+        try {
+
+            const { id, ...updates } = input
+            const result = await ProductsModel.findByIdAndUpdate(id, { ...updates, })
+            console.log("result ", result);
+            
+            return true
+        } catch (error) {
+            
+            console.log("Error in updateOrder ", error)
+            return false
+        }
+    }
+
+    @Authorized()
+    @Query(()=> Boolean, { nullable: false, })
+    async updateOrderStatus( @Arg("status") status: string, @Arg("status") id: string, @Ctx() context: IContext, ) {
+
+        // ensure user is an admin
+        const user = context.user
+        if( user?.role != "ADMIN" ) {
+
+            return { error: "Not Authorized" }
+        }
+        
+        try {
+
+            const result = await ProductsModel.findByIdAndUpdate(id, { status, })
+            console.log("result ", result);
+            
+            return true
+        } catch (error) {
+            
+            console.log("Error in updateOrderStatus ", error)
+            return false
+        }
+    }
+
+
+    @Query(()=> OrdersModel, { nullable: false, })
+    async getOrderDetails( @Arg("status") id: string, @Arg("phone") phone: string, @Ctx() context: IContext, ) {
+
+        // ensure user is an admin
+        const user = context.user
+        
+        try {
+
+            if( user?.role === "ADMIN" ) {
+
+                return await ProductsModel.findById(id)
+            }
+
+            if( !user ) {
+
+                return await ProductsModel.findOne({ accountId: phone, })
+            } else {
+
+                return await ProductsModel.findOne({ accountId: user?._id, })
+            }
+        } catch (error) {
+            
+            return null
+        }
+    }
+
+    @Authorized()
+    @Query(()=> OrdersModel, { nullable: false, })
+    async getOrders( @Arg("input") input: GetOrdersInput, @Ctx() context: IContext, ) {
+
+        // ensure user is an admin
+        const user = context.user
+        if( user?.role != "ADMIN" ) {
+
+            return { error: "Not Authorized" }
+        }
+        
+        // remove null search parameters
+        const filters = Object.fromEntries(
+            Object.entries(input).filter((arr)=> arr[1] != null)
+        )
+
+        try {
+
+            const products =  await ProductsModel.find(filters).lean()
+            
+            return products
+        } catch (error) {
+            
+            return []
+        }
+    }
 
 }
