@@ -1,14 +1,14 @@
-import { Arg, Args, Authorized, Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { IContext } from "../sub_types/context.js";
-import { OrderProducts, OrdersModel, PlaceOrderResult } from "./types.js";
+import { Order, OrderProducts, OrdersModel, PlaceOrderResult } from "./types.js";
 import { GetOrdersInput, PlaceOrderInput, UpdateOrderInput } from "./inputs.js";
 import { ProductsModel } from "../products/types.js";
 
 
 @Resolver()
-export class ProductsResolvers {
+export class OrdersResolvers {
 
-    @Query(()=> PlaceOrderResult, { nullable: false, })
+    @Mutation(()=> PlaceOrderResult, { nullable: false, })
     async placeOrder(
         @Arg("input") input: PlaceOrderInput,
         @Ctx() context: IContext,
@@ -86,7 +86,7 @@ export class ProductsResolvers {
 
 
     @Authorized()
-    @Query(()=> Boolean, { nullable: false, })
+    @Mutation(()=> Boolean, { nullable: false, })
     async updateOrder( @Arg("input") input: UpdateOrderInput,  @Ctx() context: IContext, ) {
 
         // ensure user is an admin
@@ -111,7 +111,7 @@ export class ProductsResolvers {
     }
 
     @Authorized()
-    @Query(()=> Boolean, { nullable: false, })
+    @Mutation(()=> Boolean, { nullable: false, })
     async updateOrderStatus( @Arg("status") status: string, @Arg("status") id: string, @Ctx() context: IContext, ) {
 
         // ensure user is an admin
@@ -135,7 +135,7 @@ export class ProductsResolvers {
     }
 
 
-    @Query(()=> OrdersModel, { nullable: false, })
+    @Query(()=> Order, { nullable: false, })
     async getOrderDetails( @Arg("status") id: string, @Arg("phone") phone: string, @Ctx() context: IContext, ) {
 
         // ensure user is an admin
@@ -162,7 +162,7 @@ export class ProductsResolvers {
     }
 
     @Authorized()
-    @Query(()=> OrdersModel, { nullable: false, })
+    @Query(()=> [Order], { nullable: false, })
     async getOrders( @Arg("input") input: GetOrdersInput, @Ctx() context: IContext, ) {
 
         // ensure user is an admin
