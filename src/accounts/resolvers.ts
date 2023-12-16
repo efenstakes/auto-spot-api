@@ -1,4 +1,4 @@
-import { Arg, Args, Authorized, Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { IContext } from "../sub_types/context.js";
 import { AccountsModel, AuthenticationResult } from "./types.js";
 import admin from 'firebase-admin'
@@ -10,7 +10,7 @@ export class AccountsResolvers {
 
 
     @Authorized()
-    @Query(()=> AuthenticationResult, { nullable: false, })
+    @Mutation(()=> AuthenticationResult, { nullable: false, })
     async authenticate( @Arg("token") token: string, @Ctx() context: IContext ) {
 
         try {
@@ -65,7 +65,7 @@ export class AccountsResolvers {
 
   
     @Authorized()
-    @Query(()=> Boolean, { nullable: false, })
+    @Mutation(()=> Boolean, { nullable: false, })
     async updateAccountPhoneNumber( @Arg("phone") phone: string,  @Ctx() context: IContext, ) {
 
         const user = context.user
@@ -83,7 +83,7 @@ export class AccountsResolvers {
     }
 
     @Authorized()
-    @Query(()=> Boolean, { nullable: false, })
+    @Mutation(()=> Boolean, { nullable: false, })
     async deleteAccount( @Ctx() context: IContext, ) {
 
         const user = context.user
