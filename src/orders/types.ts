@@ -119,3 +119,24 @@ export class Order {
 export const OrdersModel = getModelForClass(Order)
 
 
+// add result
+export const PlaceOrderResult = createUnionType({
+    name: "PlaceOrderResult",
+    types: ()=> [ ErrorResult, Order ],
+    resolveType: (result) => {
+        
+
+        if( "_id" in result ) {
+
+            return Order
+        }
+
+        if( "error" in result ) {
+
+            return ErrorResult
+        }
+
+        return undefined
+    }
+})
+
