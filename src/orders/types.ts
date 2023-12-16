@@ -108,7 +108,6 @@ export class Order {
     @prop({ default: "PROCESSING", enum: [ 'DELIVERED', 'SHIPPPING', 'READY', 'PROCESSING', 'CANCELLED', 'DENIED' ] })
     status: string
 
-
     @Field(()=> String, { nullable: true })
     @prop({ default: "CUSTOMER", enum: [ 'CUSTOMER', 'ADMIN' ] })
     orderType: string
