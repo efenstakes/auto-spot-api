@@ -1,3 +1,6 @@
+import { AuthChecker } from "type-graphql"
+import { IContext } from "../sub_types/context.js"
+
 const jwt = require('jsonwebtoken')
 
 
@@ -113,4 +116,8 @@ export class AuthenticationService {
     }
 
 
+    static authChecker: AuthChecker<IContext> = ({ context: { user, } })=> {
+
+        return user != null || user != undefined
+    }
 }
