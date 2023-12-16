@@ -59,6 +59,15 @@ export class ProductsResolvers {
     }
     
 
+    @Query(()=> Product, { defaultValue: [], })
+    async getProduct( @Arg("id") id: string ) {
+
+        const product = await ProductsModel.findById(id).lean()
+
+        return product
+    }
+    
+
     @Query(()=> [Product], { defaultValue: [], })
     async getProducts(
         @Arg("input") input: SearchProductsInput,
@@ -68,10 +77,11 @@ export class ProductsResolvers {
 
         // remove null search parameters
         const filters = Object.fromEntries(
-            Object.entries(input).filter((arr)=> arr[1] != null)
+            Object.entries(input || {}).filter((arr)=> arr[1] != null)
         )
+        console.log("filters ", filters);
 
-        const products = await ProductsModel.find({ ...filters })
+        const products = await ProductsModel.find({ ...filters, })
             .lean()
             .skip(offset)
             .limit(limit)
