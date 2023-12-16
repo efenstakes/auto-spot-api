@@ -30,8 +30,8 @@ export class ProductVariantInput {
     discountLastDate?: Number
 }
 
-@InputType("ProductInput")
-export class ProductInput {
+@InputType("AddProductInput")
+export class AddProductInput {
 
     @IsNotEmpty()
     @MinLength(4, { message: "Name must be longer than 4 characters" })
