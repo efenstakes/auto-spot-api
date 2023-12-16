@@ -22,12 +22,10 @@ export class PlaceOrderProductInput {
 export class PlaceOrderInput {
     
     @IsNotEmpty()
-    @MinLength(1)
     @Field(()=> [PlaceOrderProductInput], { nullable: false })
     products: mongoose.Types.Array<PlaceOrderProductInput>
 
     @IsNotEmpty()
-    @IsPhoneNumber()
     @Field(()=> String, { nullable: false })
     phone: string
 
