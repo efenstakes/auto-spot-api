@@ -1,10 +1,63 @@
 import { Arg, Args, Authorized, Ctx, Query, Resolver } from "type-graphql";
-import { Product, ProductsModel } from "./types.js";
-import { SearchProductsInput } from "./input.js";
+import { AddProductResult, Product, ProductsModel } from "./types.js";
+import { AddProductInput, SearchProductsInput } from "./input.js";
+import { IContext } from "../sub_types/context.js";
 
 
 @Resolver()
 export class ProductsResolvers {
+
+
+    @Authorized()
+    @Query(()=> AddProductResult, { nullable: false, })
+    async addProduct(
+        @Arg("input") input: AddProductInput,
+        @Ctx() context: IContext,
+    ) {
+
+        const user = context.user
+        if( user.role != "ADMIN" ) {
+
+            return { error: "Not Authorized" }
+        }
+        
+        try {
+
+            const newProduct = await new ProductsModel(input).save()
+            return newProduct
+        } catch (error) {
+            
+            console.log("Error in addProduct ", error)
+            return { "error": "An error occurred while adding product. Please try again." }
+        }
+    }
+
+    @Authorized()
+    @Query(()=> AddProductResult, { nullable: false, })
+    async updateProduct(
+        @Arg("input") input: AddProductInput,
+        @Arg("id") id: string,
+        @Ctx() context: IContext,
+    ) {
+
+        const user = context.user
+        if( user.role != "ADMIN" ) {
+
+            return { error: "Not Authorized" }
+        }
+        
+        try {
+
+            const product = await ProductsModel.findByIdAndUpdate(id, { ...input }).lean()
+
+            return product
+        } catch (error) {
+            
+            console.log("Error in updateProduct ", error)
+            return { "error": "An error occurred while updating product. Please try again." }
+        }
+    }
+    
 
     @Query(()=> [Product], { defaultValue: [], })
     async getProducts(
@@ -25,5 +78,6 @@ export class ProductsResolvers {
 
         return products
     }
+    
     
 }
