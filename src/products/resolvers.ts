@@ -1,4 +1,4 @@
-import { Arg, Args, Authorized, Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Args, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { AddProductResult, Product, ProductsModel } from "./types.js";
 import { AddProductInput, SearchProductsInput } from "./input.js";
 import { IContext } from "../sub_types/context.js";
@@ -9,7 +9,7 @@ export class ProductsResolvers {
 
 
     @Authorized()
-    @Query(()=> AddProductResult, { nullable: false, })
+    @Mutation(()=> AddProductResult, { nullable: false, })
     async addProduct(
         @Arg("input") input: AddProductInput,
         @Ctx() context: IContext,
@@ -33,7 +33,7 @@ export class ProductsResolvers {
     }
 
     @Authorized()
-    @Query(()=> AddProductResult, { nullable: false, })
+    @Mutation(()=> AddProductResult, { nullable: false, })
     async updateProduct(
         @Arg("input") input: AddProductInput,
         @Arg("id") id: string,
@@ -91,7 +91,7 @@ export class ProductsResolvers {
     
     
     @Authorized()
-    @Query(()=> Boolean, { nullable: false, })
+    @Mutation(()=> Boolean, { nullable: false, })
     async deleteProduct( @Arg("id") id: string,  @Ctx() context: IContext, ) {
 
         // ensure user is an admin
