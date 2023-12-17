@@ -18,8 +18,8 @@ COPY . .
 RUN npm run build
 
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port 2345
+EXPOSE 2345
 
 # start your Node.js application
-CMD ["node", "/build/index.js"]
+CMD ["node", "./build/dev.js"]
