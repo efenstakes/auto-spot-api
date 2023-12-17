@@ -3,6 +3,7 @@ import { IContext } from "../sub_types/context.js";
 import { Order, OrderProducts, OrdersModel, PlaceOrderResult } from "./types.js";
 import { GetOrdersInput, PlaceOrderInput, UpdateOrderInput } from "./inputs.js";
 import { ProductsModel } from "../products/types.js";
+import { LocalPaymentsService } from "../services/local_payments.js";
 
 
 @Resolver()
@@ -60,6 +61,10 @@ export class OrdersResolvers {
             // total price
             const totalPrice = cartProducts.map(p=> p.price * p.quantity).reduce((acc, p)=> acc + p, 0)
 
+            // initiate payment
+            const x = await LocalPaymentsService.initiatePayment({ amount: totalPrice, phone: user?.phone || input.phone, })
+
+            // save
             const order = await new OrdersModel({
                 accountId: user?._id || input.phone,
                 accountType: user != null ? "ACCOUNT" : "PHONE",
