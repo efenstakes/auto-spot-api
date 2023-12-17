@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "cp ./src/.env ./build/.env & tsc --watch & nodemon ./build/dev.js",
+    "dev": "cp ./src/firebaseConfig.json ./build/firebaseConfig.json & cp ./src/.env ./build/.env & tsc --watch & nodemon ./build/dev.js",
     "start": "node ./build/dev.js",
-    "build": "tsc -p .",
+    "build": "cp ./src/firebaseConfig.json ./build/firebaseConfig.json & cp ./src/.env ./build/.env & tsc -p .",
     "deploy": "yarn build && serverless deploy"
   },
   "keywords": [],
