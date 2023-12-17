@@ -76,10 +76,20 @@ export class ProductsResolvers {
     ) {
 
         // remove null search parameters
-        const filters = Object.fromEntries(
+        const parameters = Object.fromEntries(
             Object.entries(input || {}).filter((arr)=> arr[1] != null)
         )
-        console.log("filters ", filters);
+        console.log("parameters ", parameters);
+
+        const { year, ...rest } = parameters
+
+        let filters = { ...rest }
+        if( year ) {
+            filters = {
+                ...filters,
+                years: { $in: year }
+            }
+        }
 
         const products = await ProductsModel.find({ ...filters, })
             .lean()
