@@ -84,4 +84,7 @@ export class SearchProductsInput {
     @Field(()=> String, { nullable: true, })
     model?: string
 
+    @Field(()=> Number, { nullable: true, })
+    year?: number
+
 }
