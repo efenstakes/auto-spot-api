@@ -36,7 +36,7 @@ export class LocalPaymentsService {
     }
 
 
-    static initiatePayment  = async ({ amount, phone, serverUrl = "", })=> {
+    static initiatePayment  = async ({ amount, phone, serverUrl = process.env.SAFARICOM_CALLBACK_URL, })=> {
         const token = await LocalPaymentsService.getDarajaToken()
 
         if( !token ) return { success: false }
